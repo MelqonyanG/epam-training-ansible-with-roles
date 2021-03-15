@@ -1,0 +1,48 @@
+---
+# tasks file for wordpress
+
+
+- name: 'Install required php packages'
+  apt:
+    name:
+      - 'php-fpm'
+      - 'php-mysql'
+    state: 'present'
+    update_cache: true
+  become: true
+- name: 'Download wordpress'
+  get_url:
+    url: 'https://wordpress.org/latest.tar.gz'
+    dest: '/var/www/latest.tar.gz'
+  become: true
+- name: 'Create www directory'
+  file:
+    state: 'directory'
+    path: '/var/www'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+  become: true
+- name: 'Untar wordpress tar file'
+  unarchive:
+    src: '/var/www/latest.tar.gz'
+    dest: '/var/www'
+    remote_src: true
+  become: true
+- name: 'Delete wordpress tar'
+  file:
+    path: '/var/www/latest.tar.gz'
+    state: 'absent'
+  become: true
+- name: 'Change file ownership'
+  file:
+    path: '/var/www/wordpress'
+    owner: 'www-data'
+    group: 'www-data'
+  become: true
+- name: 'Deploy wordpress config file'
+  template:
+    src: 'wp-config.php'
+    dest: '/var/www/wordpresswp-config.php'
+  become: true
+

@@ -1,0 +1,18 @@
+server {
+  listen {{ nginx_listen_port }} default_server;
+  listen [::]:{{ nginx_listen_port }} default_server;
+  root /var/www/wordpress;
+  index index.html index.htm index.php;
+
+  server_name {{ server_name }};
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/var/run/php/{{ php_fmp_file }};
+  }
+}
+

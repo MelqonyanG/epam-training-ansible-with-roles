@@ -1,6 +1,13 @@
 - hosts: 'webservers'
+  remote_user: 'gayane'
   vars:
+    ansible_python_interpreter: python3
     nginx_listen_port: 80
+    server_name: '192.168.5.3'
+    php_fmp_file: 'php7.4-fpm.sock'
+    wp_db_name: 'wpdb'
+    wp_db_user_name: 'wpuser'
+    wp_db_user_password: 'wppassword'
   roles:
     - role: 'nginx'
     - role: 'mysql'
